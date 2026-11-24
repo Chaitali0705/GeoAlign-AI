@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "plot_1145_reference_truth",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "plot_number": "1145", "status": "aligned", "note": "" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 74.034417, 20.246825 ], [ 74.034391, 20.246651 ], [ 74.034385, 20.24658 ], [ 74.033514, 20.246602 ], [ 74.03341, 20.246614 ], [ 74.03341, 20.246781 ], [ 74.033507, 20.246774 ], [ 74.034417, 20.246825 ] ] ] ] } }
+]
+}

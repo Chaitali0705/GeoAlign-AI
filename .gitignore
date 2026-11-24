@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.tif
+data/*/imagery.tif
+data/*/boundaries.tif
+independent-run*.log
+reports/rendered*/
+reports/*.pdf
+reports/BhuMe_*
+data/*/smoke_predictions.geojson
+data/*/ml_smoke_predictions.geojson

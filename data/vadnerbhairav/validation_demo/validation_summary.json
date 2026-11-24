@@ -1,0 +1,53 @@
+[
+  {
+    "plot": "1145",
+    "satellite_preview": "plot_1145_satellite.png",
+    "official_input": "plot_1145_official.geojson",
+    "ml_prediction": "plot_1145_ml_prediction.geojson",
+    "reference_truth": "plot_1145_reference_truth.geojson",
+    "bounds_epsg4326": {
+      "west": 74.0322200515029,
+      "east": 74.03569619438619,
+      "south": 20.24542943804675,
+      "north": 20.247935851135967
+    },
+    "official_iou": 0.495,
+    "ml_prediction_iou": 0.948,
+    "iou_improvement": 0.453,
+    "ml_centroid_error_m": 2.231
+  },
+  {
+    "plot": "2647",
+    "satellite_preview": "plot_2647_satellite.png",
+    "official_input": "plot_2647_official.geojson",
+    "ml_prediction": "plot_2647_ml_prediction.geojson",
+    "reference_truth": "plot_2647_reference_truth.geojson",
+    "bounds_epsg4326": {
+      "west": 74.02381937286826,
+      "east": 74.0269951083419,
+      "south": 20.249153812372587,
+      "north": 20.25200239516175
+    },
+    "official_iou": 0.414,
+    "ml_prediction_iou": 0.805,
+    "iou_improvement": 0.391,
+    "ml_centroid_error_m": 4.614
+  },
+  {
+    "plot": "1710",
+    "satellite_preview": "plot_1710_satellite.png",
+    "official_input": "plot_1710_official.geojson",
+    "ml_prediction": "plot_1710_ml_prediction.geojson",
+    "reference_truth": "plot_1710_reference_truth.geojson",
+    "bounds_epsg4326": {
+      "west": 74.01452820084069,
+      "east": 74.0177361228225,
+      "south": 20.223514216920456,
+      "north": 20.226725689640304
+    },
+    "official_iou": 0.612,
+    "ml_prediction_iou": 0.91,
+    "iou_improvement": 0.298,
+    "ml_centroid_error_m": 2.372
+  }
+]
