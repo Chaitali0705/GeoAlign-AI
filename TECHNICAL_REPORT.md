@@ -152,6 +152,34 @@ The completed ML-enabled independent run processed the full village:
 
 The six public truths are a small directional evaluation set, not a complete measure of generalisation. They are deliberately excluded from fitting the alignment model and the synthetic-ML training procedure. All 1,892 corrected output records include a per-parcel `ml_iou` estimate in their method note.
 
+### Performance matrix
+
+#### Coverage and output validity
+
+| Measure | Result | Interpretation |
+|---|---:|---|
+| Parcels processed | 2,457 | Complete local village bundle processed. |
+| Corrected parcels | 1,892 | Sufficient image, spatial, and ML-confidence evidence. |
+| Flagged parcels | 565 | Retained for review rather than moved without support. |
+| Invalid output geometries | 0 | Final GeoJSON is valid for GIS review. |
+
+#### Accuracy and spatial alignment
+
+| Measure | Official input | GeoAlign AI | Change |
+|---|---:|---:|---|
+| Median IoU on 6 public truths | 0.584 | 0.884 | +0.300 |
+| Public reference plots improved | Baseline | 6 / 6 | All available examples improved |
+| Median centroid error | Not reported | 2.739 m | Remaining centre displacement |
+
+#### ML confidence model
+
+| Model measure | Result | Interpretation |
+|---|---|---|
+| Algorithm | Random Forest regressor | Estimates expected recovery IoU from evidence features. |
+| Synthetic training examples | 320 | Four controlled shifts for each of 80 sampled parcels. |
+| Public truths used as labels | 0 | Public reference polygons remain evaluation-only. |
+| Model artifact | ml_confidence_model.joblib | Saved for reproducibility and inspection. |
+
 ### Evaluation checks
 
 `evaluate.py` verifies:
@@ -184,6 +212,16 @@ The static viewer at `viewer/index.html` supports manual quality assurance witho
 5. Render the overlay and click a parcel to inspect its status, confidence, and method note.
 
 Corrected parcels are green, flagged parcels are orange, and the optional official input overlay is navy blue.
+
+### Suggested screenshot spaces
+
+Add three project screenshots in this section before final print or presentation:
+
+| Figure slot | Insert | What it proves |
+|---|---|---|
+| A. Satellite input | A cropped satellite image with a visible field boundary | The imagery contains usable physical boundary evidence. |
+| B. Edge evidence | Gradient, Canny, or edge-affinity output for the same area | The computer-vision stage converts imagery into a boundary-evidence surface. |
+| C. Validation viewer | Viewer screenshot for plot 1145 with official, ML, and reference layers | The ML prediction aligns more closely with held-out reference truth than the official input. |
 
 ## 9. Reproducibility
 

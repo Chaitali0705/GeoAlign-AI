@@ -270,6 +270,32 @@ def add_figure(doc, image_path: Path, caption: str, width: float = 6.65) -> None
     set_font(run, 8.7, color=RGBColor(75, 85, 99))
 
 
+def add_image_placeholder(doc, title: str, instruction: str, height: float = 1.45) -> None:
+    """Reserve a clearly labelled slot for a project screenshot or photograph."""
+    table = doc.add_table(rows=1, cols=1)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.style = "Table Grid"
+    cell = table.cell(0, 0)
+    cell.width = Inches(6.65)
+    set_cell_shading(cell, "F7FAFC")
+    set_cell_border(cell)
+    set_cell_margins(cell, top=180, bottom=180, start=180, end=180)
+    cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+    cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = cell.paragraphs[0].add_run(title)
+    set_font(run, 11, bold=True, color=RGBColor(23, 54, 93))
+    paragraph = cell.add_paragraph()
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = paragraph.add_run(instruction)
+    set_font(run, 9, color=RGBColor(75, 85, 99))
+    table.rows[0].height = Inches(height)
+    caption = doc.add_paragraph()
+    caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    caption.paragraph_format.space_after = Pt(9)
+    run = caption.add_run("Replace this reserved space with a project screenshot before final print or presentation.")
+    set_font(run, 8.3, color=RGBColor(75, 85, 99))
+
+
 def add_table(doc, headers, rows, widths=None):
     table = doc.add_table(rows=1, cols=len(headers))
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -378,6 +404,7 @@ def build() -> None:
         ["Boundary hint raster", "boundaries.tif", "Optional secondary evidence layer; it supports but does not replace imagery-derived edges."],
         ["Public example truths", "example_truths.geojson", "Used only after prediction for directional public evaluation, not for fitting the alignment."],
     ], widths=[1.45, 1.45, 3.9])
+    add_image_placeholder(doc, "Figure slot A  Satellite input", "Insert a cropped satellite image showing visible field boundaries and one official parcel.")
     add_para(doc, "The output is predictions.geojson in WGS84. Every output feature preserves the plot number and carries a status of corrected or flagged. Corrected features include a confidence score and a short method note. Flagged features retain the official placement except when a source geometry must be normalized to remain valid for GIS tools.")
 
     heading(doc, "3 End to End Architecture")
@@ -397,6 +424,7 @@ def build() -> None:
     add_para(doc, "For each plot, the system transforms the official polygon from WGS84 into the satellite image coordinate reference system. It crops a padded image patch around that plot. Padding is large enough to support the possible search movement, while avoiding the cost of processing the entire village image for every parcel. The corresponding optional boundary-hint patch is resampled to the same patch extent and shape.")
     heading(doc, "4.2 Edge-affinity generation", 2)
     add_para(doc, "The RGB image is converted to grayscale. A Scharr gradient detects intensity transitions, while Canny edge detection emphasizes sharper contours. The two signals are combined and smoothed to reduce high-frequency texture caused by crops, roofs, and noise. If a boundary-hint raster is available, it is fused as a lower-weight supporting signal. The result is normalized to a 0 to 1 edge-affinity surface.")
+    add_image_placeholder(doc, "Figure slot B  Edge evidence", "Insert a gradient, Canny edge map, or edge-affinity image from the same parcel area.")
     heading(doc, "4.3 Parcel outline matching", 2)
     add_para(doc, "The system rasterizes the parcel boundary as a thin buffered ring rather than matching the entire polygon interior. This reduces sensitivity to crop appearance and focuses the objective on visible field boundaries. FFT cross-correlation efficiently evaluates many translations at once. The local search radius scales with the square root of parcel area and is capped so that small parcels do not jump to distant unrelated edges.")
     heading(doc, "4.4 Quality signals", 2)
@@ -430,6 +458,28 @@ def build() -> None:
 
     heading(doc, "7 Evaluation Results")
     add_para(doc, "The full independent run was evaluated against the available public example truths. These six examples are a small directional sample rather than a sufficient training set or complete estimate of hidden-set performance. They were not used to fit the alignment parameters.")
+    heading(doc, "7.1 Performance Matrix", 2)
+    heading(doc, "7.1.1 Coverage and output validity", 3)
+    add_table(doc, ["Measure", "Result", "Interpretation"], [
+        ["Parcels processed", "2,457", "Complete local village bundle processed."],
+        ["Corrected parcels", "1,892", "Sufficient image, spatial, and ML-confidence evidence."],
+        ["Flagged parcels", "565", "Retained for review rather than moved without support."],
+        ["Invalid output geometries", "0", "Final GeoJSON is valid for GIS review."],
+    ], widths=[2.1, 1.15, 3.55])
+    heading(doc, "7.1.2 Accuracy and spatial alignment", 3)
+    add_table(doc, ["Measure", "Official input", "GeoAlign AI", "Change"], [
+        ["Median IoU on 6 public truths", "0.584", "0.884", "+0.300"],
+        ["Public reference plots improved", "Baseline", "6 of 6", "All available examples improved"],
+        ["Median centroid error", "Not reported", "2.739 m", "Remaining centre displacement"],
+    ], widths=[2.35, 1.3, 1.3, 1.85])
+    heading(doc, "7.1.3 ML confidence model", 3)
+    add_table(doc, ["Model measure", "Result", "Interpretation"], [
+        ["Algorithm", "Random Forest regressor", "Estimates expected recovery IoU from evidence features."],
+        ["Synthetic training examples", "320", "Four controlled shifts for each of 80 sampled parcels."],
+        ["Public truths used as labels", "0", "Public reference polygons remain evaluation-only."],
+        ["Model artifact", "ml_confidence_model.joblib", "Saved for reproducibility and inspection."],
+    ], widths=[2.15, 1.85, 2.8])
+    heading(doc, "7.2 Detailed evaluated metrics", 2)
     add_table(doc, ["Metric", "Official input", "Independent prediction", "Interpretation"], [
         ["Plots processed", "2,457", "2,457", "Complete village output was generated."],
         ["Corrected plots", "Not applicable", "1,892", "Plots with adequate correction evidence."],
@@ -445,6 +495,7 @@ def build() -> None:
     heading(doc, "8 Web Based Visual Review")
     add_para(doc, "A lightweight browser viewer supports human review of the results. The user uploads a PNG or JPEG satellite preview, the independent prediction GeoJSON, and optionally the official input GeoJSON. After entering the geographic extent of the preview image, the viewer overlays parcel boundaries. Blue represents official input geometry, green represents corrected predictions, and orange represents flagged plots. Clicking a plot displays its identifier, status, confidence, and method note.")
     add_para(doc, "The viewer is not part of the inference model. Its purpose is explainability and quality assurance. It allows reviewers to inspect high-confidence examples, borderline corrections, and flagged parcels rather than treating the GeoJSON output as a black box.")
+    add_image_placeholder(doc, "Figure slot C  Validation viewer", "Insert the GeoAlign AI viewer screenshot for plot 1145 with official input, ML prediction, and reference truth overlaid.")
 
     heading(doc, "9 Design Trade Offs")
     add_table(doc, ["Decision", "Benefit", "Trade off and mitigation"], [
