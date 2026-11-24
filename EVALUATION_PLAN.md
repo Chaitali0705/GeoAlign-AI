@@ -13,4 +13,4 @@ This project should be evaluated in three reproducible runs on the same village 
 
 Use public example truths only to report results, never to fit offsets or thresholds. Inspect
 high-confidence corrections, low-confidence flags, and parcels beside sharp imagery edges before
-submission. Hidden-set performance matters more than a tiny public sample.
+academic evaluation. Hidden-set performance matters more than a tiny public sample.

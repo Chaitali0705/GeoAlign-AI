@@ -206,7 +206,7 @@ For a short development run:
 & ".\.venv\Scripts\python.exe" .\main.py "C:\path\to\village" --limit 10
 ```
 
-Large imagery files are intentionally excluded from Git. Retain the challenge-provided rasters locally or distribute them through the approved data channel.
+Large imagery files are intentionally excluded from Git. Retain the project raster inputs locally or distribute them through an appropriate data channel.
 
 ## 10. Design trade-offs
 

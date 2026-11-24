@@ -76,5 +76,5 @@ flagging when imagery is ambiguous.
 - The independent improvement has completed its full-village run. The remaining technical work is
   visual QA of high-confidence corrections, low-confidence flags, and already-aligned controls.
 - The public truth set is very small, so it is not appropriate to tune to it.
-- Before final submission I will inspect high-confidence corrections, low-confidence flags, and
+- Before final review I will inspect high-confidence corrections, low-confidence flags, and
   already-aligned controls to protect against over-correction.

@@ -66,11 +66,10 @@ From PowerShell, run the full village and automatically validate the resulting G
 .\run_full.ps1
 ```
 
-## Submission notes
+## Project notes
 
-- The output covers every input plot and follows the required `corrected` / `flagged` contract.
-- Large raster files are ignored by Git; retain them locally for reproducibility or provide them
-  separately when requested.
-- This implementation was written independently for this project. Public BhuMe repositories were
-  examined as references during problem exploration; they are not vendored here. Keep AI-session
-  records in `transcripts/` as required by the challenge.
+- The output covers every input plot and uses the `corrected` / `flagged` review contract.
+- Large raster files are ignored by Git; retain them locally for reproducibility.
+- This implementation was written independently for this academic project. Public repositories
+  were examined only as references during early problem exploration; their source code is not
+  vendored here.
